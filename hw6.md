@@ -1,6 +1,6 @@
 # 流程圖
 ![流程圖](流程圖.png)
-- ![流程圖連結](https://app.milanote.com/1VpDt11ka8X07j?p=QpQpUETjmWe):字太小的話可以點進去看
+[流程圖連結](https://app.milanote.com/1VpDt11ka8X07j?p=QpQpUETjmWe)，字太小的話可以點進去看
 
 # 分鏡圖
 ### 遊戲主選單
