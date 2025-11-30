@@ -1,4 +1,4 @@
-# 流程圖
+# 流程圖🤔
 ![流程圖](流程圖.png)
 [流程圖連結](https://app.milanote.com/1VpDt11ka8X07j?p=QpQpUETjmWe)，字太小的話可以點進去看
 
@@ -21,7 +21,7 @@
 - 🖥️Windows Mode:調整視窗大小(目前僅供Fullscreen和Windows選項)
 - 🖥️fps:調整遊戲FPS(目前僅供30、60、120、240選項)
 - 🖥️Vsync:垂直同步選項，打勾即可開啟
-
+- back:回到上一個介面
 ### ⏸️暫停畫面(遊戲中按下ESc鍵跳出)
 ![遊戲暫停](分鏡圖場景圖片/PauseMenu.png)
 - 🔙Resume:返回遊戲
