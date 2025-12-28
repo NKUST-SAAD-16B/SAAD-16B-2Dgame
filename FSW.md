@@ -17,3 +17,18 @@ stateDiagram-v2
     anystate --> hurt
     anystate --> dead
 ```
+
+## 有限狀態機-骷髏
+```mermaid
+stateDiagram-v2
+    [*] --> idle
+    idle --> walk
+    walk --> idle
+    chase -->idle
+    chase --> attack
+    attack --> walk
+    hurt --> idle
+    anystate --> hurt
+    anystate --> dead
+    anystate --> chase
+```
