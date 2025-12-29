@@ -202,3 +202,83 @@ classDiagram
     State <|-- SkeletonWalk
     State <|-- SkeletonAttack
 ```
+
+## 循序圖-骷髏攻擊玩家
+```mermaid
+sequenceDiagram
+    autonumber
+    participant SA as Skeleton (AttackState)
+    participant HB as HitBox (Skeleton)
+    participant HUB as HurtBox (Player)
+    participant HC as HealthComponent (Player)
+    participant P as Player (Main/State Machine)
+    participant UI as PlayerUI
+
+    Note over SA: 進入攻擊距離 (<= 30)
+    SA->>SA: Enter(): 播放 "attack" 動畫
+    SA->>SA: 偵測動畫幀 (frame_changed)
+    
+    Note over SA, HB: 到達攻擊幀 (第 7 幀)
+    SA->>HB: 開啟碰撞 (disabled = false)
+
+    Note over HB, HUB: 發生碰撞偵測
+    HB->>HUB: 觸發 hurt 訊號 (emit) 
+    
+    HUB->>HUB: 計算擊退向量 (knockback_vector)
+    HUB->>HC: 執行 take_damage(damage, knockback)
+    
+    HC->>HC: 更新 current_health 
+    HC-->>UI: 發送 health_bar_changed 訊號 
+    UI->>UI: 更新血條與緩衝條動畫 
+
+    alt current_health > 0
+        HC->>P: 發送 took_damage 訊號 
+        P->>P: 執行 _hurt(knockback)
+        P->>P: 狀態機切換至 "hurt"
+        P->>P: HurtState: 施加擊退力、播放hurt動畫
+        
+    else current_health <= 0
+        HC->>P: 發送 died 訊號 
+        P->>P: 執行 _on_died()
+        P->>P: 狀態機切換至 "DiedState"
+        P->>P: DiedState: 播放died動畫，及後續處理
+    end
+
+    Note over SA: 動畫播放結束
+    SA->>HB: Exit(): 關閉碰撞 (disabled = true)
+```
+
+## 循序圖-玩家攻擊骷髏
+```mermaid
+sequenceDiagram
+    autonumber
+    participant P as Player (AttackState)
+    participant HB as HitBox (Player)
+    participant HUB as HurtBox (Skeleton)
+    participant HC as HealthComponent (Skeleton)
+    participant S as Skeleton (Main/State Machine)
+
+    Note over P: 偵測到攻擊輸入 
+    P->>P: Enter(): 播放 attack_1 動畫 
+    P->>HB: 開啟碰撞 (disabled = false) 
+    
+    Note over HB, HUB: 發生碰撞偵測 
+    HB->>HUB: 觸發 hurt 訊號 (emit) 
+    
+    HUB->>HUB: 計算擊退向量 (knockback_vector) 
+    HUB->>HC: 執行 take_damage(damage, knockback) 
+    
+    HC->>HC: 更新 current_health 
+     
+    
+    alt current_health > 0
+        HC->>S: 發送 took_damage 訊號 
+        S->>S: 狀態機切換至 "hurt" 
+        S->>S: 執行 _hurt(knockback)
+        S->>S: SkeletonHurt: 施加擊退力、播放hurt動畫
+    else current_health <= 0
+        HC->>S: 發送 died 訊號 
+        S->>S: 狀態機切換至 "died" 
+        S->>S: SkeletonDied: 播放died動畫、關閉 HurtBox 並 queue_free() 
+    end
+```
